@@ -1,8 +1,11 @@
+// api/generate-song.js
+
 export default async function handler(req, res) {
-  // Allow only POST requests
+  // Allow POST only
   if (req.method !== "POST") {
     return res.status(405).json({
-      error: "Method not allowed"
+      success: false,
+      error: "Method not allowed",
     });
   }
 
@@ -10,53 +13,110 @@ export default async function handler(req, res) {
     const {
       recipientName,
       senderName,
-      message,
-      style
+      style,
+      message
     } = req.body || {};
 
-    if (!recipientName) {
+    // Recipient name is required
+    if (!recipientName || !recipientName.trim()) {
       return res.status(400).json({
-        error: "Recipient name is required"
+        success: false,
+        error: "Recipient name is required",
       });
     }
 
-    // Create personalized birthday lyrics
+    const cleanRecipient = recipientName.trim();
+    const cleanSender =
+      senderName && senderName.trim()
+        ? senderName.trim()
+        : "Someone special";
+
+    const cleanStyle =
+      style && style.trim()
+        ? style.trim()
+        : "Happy Pop";
+
+    const cleanMessage =
+      message && message.trim()
+        ? message.trim()
+        : "Wishing you happiness, laughter and an amazing year ahead.";
+
+    /*
+      -------------------------------------------
+      PERSONALIZED BIRTHDAY SONG
+      -------------------------------------------
+    */
+
     const lyrics = `
-Happy birthday to you,
-Happy birthday dear ${recipientName},
-May your dreams and wishes all come true,
-And may happiness always stay with you.
+Happy birthday ${cleanRecipient},
+Today is your special day.
 
-Today we celebrate ${recipientName},
-A special day filled with joy,
-May laughter, love and happiness
-Follow you wherever you go.
+We are here to celebrate you,
+And send some happiness your way.
 
-${message ? message : "Wishing you a wonderful birthday!"}
+Happy birthday ${cleanRecipient},
+May your dreams all come true.
 
-Happy birthday ${recipientName}!
+May your day be filled with laughter,
+And wonderful memories too.
+
+${cleanMessage}
+
+So turn the music up,
+Let everybody sing.
+
+Happy birthday ${cleanRecipient},
+Let's celebrate everything!
+
+Happy birthday ${cleanRecipient}!
 
 With love,
-${senderName || "Someone special"}
+${cleanSender}
     `.trim();
 
     /*
-      V2 BACKEND
+      -------------------------------------------
+      AUDIO GENERATION
+      -------------------------------------------
 
-      This endpoint currently creates the personalized
-      song lyrics and returns them to the website.
+      The website/backend is now ready.
 
-      Later we will connect the audio/music generation
-      service here without exposing its API key in index.html.
+      In the next stage we connect an audio
+      provider here.
+
+      IMPORTANT:
+      API keys must be stored in Vercel
+      Environment Variables and never inside
+      index.html.
+
+      When the audio provider returns an MP3,
+      replace audioUrl below with the generated
+      audio URL.
+    */
+
+    const audioUrl = null;
+
+    /*
+      -------------------------------------------
+      RESPONSE TO WEBSITE
+      -------------------------------------------
     */
 
     return res.status(200).json({
       success: true,
-      recipientName,
-      senderName: senderName || "",
-      style: style || "Happy Pop",
+
+      recipientName: cleanRecipient,
+      senderName: cleanSender,
+      style: cleanStyle,
+      message: cleanMessage,
+
       lyrics,
-      audioUrl: null
+
+      audioUrl,
+
+      status: audioUrl
+        ? "audio-ready"
+        : "lyrics-ready",
     });
 
   } catch (error) {
@@ -64,7 +124,7 @@ ${senderName || "Someone special"}
 
     return res.status(500).json({
       success: false,
-      error: "Unable to generate song"
+      error: "Unable to generate song",
     });
   }
 }
