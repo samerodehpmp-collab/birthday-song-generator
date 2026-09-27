@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Birthday Song Generator</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #111827, #1f2937);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 520px;
+      background: #182235;
+      border: 1px solid #334155;
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+    }
+
+    h1 {
+      text-align: center;
+      margin: 0 0 8px;
+      font-size: 30px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #a8b3c7;
+      margin-bottom: 28px;
+    }
+
+    label {
+      display: block;
+      margin: 16px 0 7px;
+      font-weight: bold;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 13px;
+      border-radius: 10px;
+      border: 1px solid #475569;
+      background: #0f172a;
+      color: white;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 24px;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: #7c3aed;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #6d28d9;
+    }
+
+    .result {
+      display: none;
+      margin-top: 25px;
+      padding: 20px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      line-height: 1.7;
+    }
+
+    .result h2 {
+      margin-top: 0;
+      color: #c4b5fd;
+    }
+
+    .song {
+      white-space: pre-line;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>🎂 Birthday Song Generator</h1>
+
+    <div class="subtitle">
+      Create a personalized birthday song in seconds
+    </div>
+
+    <label for="name">Birthday Person</label>
+    <input
+      id="name"
+      type="text"
+      placeholder="Enter their name"
+    >
+
+    <label for="age">Age</label>
+    <input
+      id="age"
+      type="number"
+      placeholder="Enter age"
+    >
+
+    <label for="style">Song Style</label>
+    <select id="style">
+      <option value="happy">Happy & Fun</option>
+      <option value="funny">Funny</option>
+      <option value="emotional">Emotional</option>
+      <option value="rock">Rock</option>
+    </select>
+
+    <button onclick="generateSong()">
+      Generate Birthday Song 🎵
+    </button>
+
+    <div id="result" class="result">
+
+      <h2>Your Birthday Song</h2>
+
+      <div id="song" class="song"></div>
+
+    </div>
+
+  </div>
+
+  <script>
+    function generateSong() {
+
+      const name =
+        document.getElementById("name").value.trim();
+
+      const age =
+        document.getElementById("age").value;
+
+      const style =
+        document.getElementById("style").value;
+
+      if (!name) {
+        alert("Please enter the birthday person's name.");
+        return;
+      }
+
+      let song = "";
+
+      if (style === "happy") {
+
+        song =
+`🎵 Happy birthday, ${name}!
+Today we're celebrating you!
+
+Smile and laugh,
+Dance and play,
+It's your very special day!
+
+${age ? `You're ${age} today, hooray!` : ""}
+
+Happy birthday, ${name}!
+May your wishes all come true! 🎂🎉`;
+
+      }
+
+      else if (style === "funny") {
+
+        song =
+`🎵 Hey ${name}, it's your birthday!
+
+Cake is ready,
+Candles too,
+Everybody came for you!
+
+${age ? `${age} years young — looking good!` : ""}
+
+Eat the cake,
+Make some noise,
+Birthday time is full of joy!
+
+Happy birthday, ${name}! 😂🎂`;
+
+      }
+
+      else if (style === "emotional") {
+
+        song =
+`🎵 Happy birthday, dear ${name}.
+
+Another year,
+Another light,
+Another memory shining bright.
+
+May happiness follow you,
+And every dream come true.
+
+${age ? `Today we celebrate ${age} wonderful years.` : ""}
+
+Happy birthday, ${name}. ❤️`;
+
+      }
+
+      else if (style === "rock") {
+
+        song =
+`🎸 Hey ${name}!
+
+Turn it up —
+It's your birthday!
+
+Raise your hands,
+Make some noise,
+Tonight we're celebrating you!
+
+${age ? `${age} years and still rocking!` : ""}
+
+Happy birthday, ${name}!
+
+ROCK ON! 🤘🎂`;
+
+      }
+
+      document.getElementById("song").textContent = song;
+      document.getElementById("result").style.display = "block";
+    }
+  </script>
+
+</body>
+</html>
