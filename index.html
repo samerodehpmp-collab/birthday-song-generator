@@ -32,11 +32,11 @@ header {
 }
 
 .logo {
-  font-size: 52px;
+  font-size: 60px;
 }
 
 h1 {
-  margin: 5px 0;
+  margin: 8px 0;
   font-size: 32px;
 }
 
@@ -49,14 +49,18 @@ h1 {
   background: rgba(255,255,255,0.10);
   border: 1px solid rgba(255,255,255,0.18);
   border-radius: 22px;
-  padding: 22px;
+  padding: 24px;
   backdrop-filter: blur(12px);
+  box-shadow: 0 20px 45px rgba(0,0,0,0.25);
+}
+
+.form-group {
+  margin-bottom: 18px;
 }
 
 label {
   display: block;
-  margin-top: 18px;
-  margin-bottom: 7px;
+  margin-bottom: 8px;
   font-weight: bold;
 }
 
@@ -64,137 +68,114 @@ input,
 textarea,
 select {
   width: 100%;
-  padding: 14px;
-  border: none;
+  border: 1px solid rgba(255,255,255,0.20);
   border-radius: 12px;
+  padding: 14px;
   font-size: 16px;
+  background: rgba(255,255,255,0.10);
+  color: white;
   outline: none;
 }
 
+input::placeholder,
+textarea::placeholder {
+  color: #ccc;
+}
+
 textarea {
-  min-height: 100px;
+  min-height: 110px;
   resize: vertical;
 }
 
-.row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.photo-area {
-  margin-top: 15px;
-  text-align: center;
-}
-
-#photoPreview {
-  display: none;
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 18px;
-  margin: 15px auto;
-  border: 3px solid rgba(255,255,255,.7);
+select option {
+  color: black;
 }
 
 button {
   width: 100%;
-  margin-top: 22px;
   padding: 16px;
   border: none;
   border-radius: 14px;
   font-size: 17px;
   font-weight: bold;
   cursor: pointer;
-}
-
-#createBtn {
-  background: linear-gradient(90deg,#ff4f9a,#ff8b5e);
   color: white;
+  background: linear-gradient(90deg, #ff4fa3, #8f5cff);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.20);
 }
 
-#createBtn:disabled {
-  opacity: .6;
-  cursor: wait;
+button:hover {
+  opacity: 0.92;
 }
 
-.result {
-  display: none;
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+#result {
   margin-top: 25px;
-  text-align: center;
 }
 
 .result-card {
-  background: rgba(0,0,0,.25);
-  padding: 22px;
-  border-radius: 18px;
-}
-
-#resultPhoto {
-  display: none;
-  width: 170px;
-  height: 170px;
-  object-fit: cover;
-  margin: auto;
-  border-radius: 18px;
-}
-
-#songTitle {
-  margin-bottom: 5px;
-}
-
-#dedication {
-  color: #ddd;
-  line-height: 1.5;
+  padding: 20px;
+  border-radius: 16px;
+  background: rgba(0,0,0,0.20);
+  text-align: center;
 }
 
 audio {
   width: 100%;
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
-.actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.download {
-  background: #fff;
-  color: #222;
-}
-
-.share {
-  background: #4cdb8a;
-  color: #102319;
-}
-
-.status {
-  display: none;
+.download-btn {
+  display: block;
   margin-top: 15px;
   padding: 13px;
-  background: rgba(0,0,0,.25);
-  border-radius: 10px;
-  text-align: center;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #452064;
+  text-decoration: none;
+  font-weight: bold;
 }
 
-.note {
-  font-size: 12px;
-  color: #ccc;
+.share-btn {
+  margin-top: 10px;
+  background: rgba(255,255,255,0.16);
+}
+
+.preview {
   margin-top: 15px;
   text-align: center;
-  line-height: 1.5;
 }
 
-@media(max-width:520px) {
-  .row,
-  .actions {
-    grid-template-columns: 1fr;
-  }
+.preview img {
+  max-width: 180px;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 16px;
+  border: 2px solid rgba(255,255,255,0.25);
+}
 
-  h1 {
-    font-size: 28px;
-  }
+.loading {
+  text-align: center;
+  padding: 20px;
+}
+
+footer {
+  text-align: center;
+  margin-top: 25px;
+  color: #bbb;
+  font-size: 13px;
+}
+
+.error {
+  color: #ffd1d1;
+}
+
+.success {
+  color: #caffd3;
 }
 </style>
 </head>
@@ -206,6 +187,7 @@ audio {
 <header>
   <div class="logo">🎂🎵</div>
   <h1>Birthday Song Generator</h1>
+
   <div class="subtitle">
     Create a personalized birthday song for someone special.
   </div>
@@ -213,113 +195,89 @@ audio {
 
 <div class="card">
 
-  <div class="row">
+  <div class="form-group">
+    <label for="recipientName">
+      🎂 Birthday Person
+    </label>
 
-    <div>
-      <label for="receiver">🎁 Birthday Person</label>
-      <input
-        id="receiver"
-        type="text"
-        placeholder="Example: Sarah"
-      >
-    </div>
-
-    <div>
-      <label for="sender">❤️ From</label>
-      <input
-        id="sender"
-        type="text"
-        placeholder="Example: Dad"
-      >
-    </div>
-
+    <input
+      id="recipientName"
+      type="text"
+      placeholder="Example: Sarah"
+    >
   </div>
 
-  <label for="message">✍️ Personal Message</label>
+  <div class="form-group">
+    <label for="senderName">
+      ❤️ From
+    </label>
 
-  <textarea
-    id="message"
-    placeholder="Example: We are so proud of you. May all your dreams come true!"
-  ></textarea>
+    <input
+      id="senderName"
+      type="text"
+      placeholder="Your name"
+    >
+  </div>
 
-  <label for="style">🎼 Song Style</label>
+  <div class="form-group">
+    <label for="message">
+      💌 Special Message
+    </label>
 
-  <select id="style">
-    <option value="happy">🎉 Happy Birthday Pop</option>
-    <option value="emotional">❤️ Emotional</option>
-    <option value="kids">🎈 Kids Birthday</option>
-    <option value="romantic">💕 Romantic</option>
-    <option value="rock">🎸 Rock</option>
-    <option value="dance">💃 Dance</option>
-    <option value="acoustic">🎹 Acoustic</option>
-  </select>
+    <textarea
+      id="message"
+      placeholder="Example: Wishing you happiness, success and an amazing year ahead!"
+    ></textarea>
+  </div>
 
-  <label for="photo">📷 Add a Picture</label>
+  <div class="form-group">
+    <label for="style">
+      🎶 Music Style
+    </label>
 
-  <input
-    id="photo"
-    type="file"
-    accept="image/*"
+    <select id="style">
+      <option value="happy">Happy Birthday</option>
+      <option value="pop">Pop</option>
+      <option value="rock">Rock</option>
+      <option value="romantic">Romantic</option>
+      <option value="dance">Dance</option>
+      <option value="acoustic">Acoustic</option>
+      <option value="kids">Kids</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="photo">
+      📷 Add Photo (optional)
+    </label>
+
+    <input
+      id="photo"
+      type="file"
+      accept="image/*"
+      onchange="previewPhoto()"
+    >
+
+    <div
+      id="photoPreview"
+      class="preview"
+    ></div>
+  </div>
+
+  <button
+    id="generateBtn"
+    onclick="generateSong()"
   >
-
-  <div class="photo-area">
-    <img id="photoPreview" alt="Birthday photo preview">
-  </div>
-
-  <button id="createBtn" onclick="createSong()">
-    🎵 Create Birthday Song
+    🎵 Generate Birthday Song
   </button>
 
-  <div class="status" id="status">
-    🎶 Preparing your personalized birthday song...
-  </div>
-
-  <div class="note">
-    Your receiver name, sender name, message and photo will be
-    included in the birthday dedication.
-  </div>
+  <div id="result"></div>
 
 </div>
 
-
-<div class="result" id="result">
-
-  <div class="result-card">
-
-    <img id="resultPhoto" alt="Birthday photo">
-
-    <h2 id="songTitle">
-      🎉 Happy Birthday!
-    </h2>
-
-    <p id="dedication"></p>
-
-    <audio
-      id="audioPlayer"
-      controls
-    ></audio>
-
-    <div class="actions">
-
-      <button
-        class="download"
-        onclick="downloadSong()"
-      >
-        ⬇️ Download MP3
-      </button>
-
-      <button
-        class="share"
-        onclick="shareSong()"
-      >
-        📤 Share Song
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
+<footer>
+  Made with ❤️ for birthdays
+</footer>
 
 </div>
 
@@ -327,261 +285,398 @@ audio {
 <script>
 
 let selectedPhoto = null;
-
-/*
-  IMPORTANT:
-
-  This version builds the complete user interface.
-
-  To generate a REAL AI song/MP3, we will connect
-  createSong() to a server/API in the next stage.
-
-  Never put a secret AI API key directly inside this HTML file.
-*/
+let currentAudioUrl = null;
 
 
-document
-  .getElementById("photo")
-  .addEventListener("change", function(event) {
+/* ==============================
+   PHOTO PREVIEW
+================================ */
 
-    const file = event.target.files[0];
+function previewPhoto() {
 
-    if (!file) return;
+  const input =
+    document.getElementById("photo");
 
-    selectedPhoto = file;
+  const preview =
+    document.getElementById("photoPreview");
 
-    const reader = new FileReader();
+  const file =
+    input.files[0];
 
-    reader.onload = function(e) {
+  if (!file) {
 
-      const preview =
-        document.getElementById("photoPreview");
+    preview.innerHTML = "";
 
-      preview.src = e.target.result;
-      preview.style.display = "block";
+    selectedPhoto = null;
 
-    };
+    return;
+  }
 
-    reader.readAsDataURL(file);
+  const reader =
+    new FileReader();
 
-  });
+  reader.onload = function(event) {
+
+    selectedPhoto =
+      event.target.result;
+
+    preview.innerHTML = `
+      <img
+        src="${selectedPhoto}"
+        alt="Birthday photo"
+      >
+    `;
+  };
+
+  reader.readAsDataURL(file);
+}
 
 
-async function createSong() {
+/* ==============================
+   GENERATE SONG
+================================ */
 
-  const receiver =
-    document.getElementById("receiver").value.trim();
+async function generateSong() {
 
-  const sender =
-    document.getElementById("sender").value.trim();
+  const recipientName =
+    document
+      .getElementById("recipientName")
+      .value
+      .trim();
+
+  const senderName =
+    document
+      .getElementById("senderName")
+      .value
+      .trim();
 
   const message =
-    document.getElementById("message").value.trim();
+    document
+      .getElementById("message")
+      .value
+      .trim();
 
   const style =
-    document.getElementById("style").value;
-
-  if (!receiver) {
-
-    alert("Please enter the birthday person's name.");
-
-    return;
-  }
-
-  if (!sender) {
-
-    alert("Please enter the sender's name.");
-
-    return;
-  }
-
+    document
+      .getElementById("style")
+      .value;
 
   const button =
-    document.getElementById("createBtn");
+    document
+      .getElementById("generateBtn");
 
-  const status =
-    document.getElementById("status");
+  const result =
+    document
+      .getElementById("result");
+
+
+  /* VALIDATION */
+
+  if (!recipientName) {
+
+    alert(
+      "Please enter the birthday person's name."
+    );
+
+    return;
+  }
+
+
+  /* LOADING */
 
   button.disabled = true;
 
-  button.textContent =
-    "🎶 Creating Song...";
-
-  status.style.display =
-    "block";
+  button.innerText =
+    "🎵 Creating your song...";
 
 
-  /*
-    ==========================================
-    REAL MUSIC API WILL BE CONNECTED HERE
-    ==========================================
+  result.innerHTML = `
+    <div class="result-card loading">
 
-    Example data sent to our backend:
+      <h3>
+        🎼 Creating your birthday song...
+      </h3>
 
-    {
-      receiver: receiver,
-      sender: sender,
-      message: message,
-      style: style
+      <p>
+        Please wait.
+      </p>
+
+    </div>
+  `;
+
+
+  try {
+
+    /* CALL OUR VERCEL API */
+
+    const response =
+      await fetch(
+        "/api/generate-song",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+
+            recipientName:
+              recipientName,
+
+            senderName:
+              senderName,
+
+            message:
+              message,
+
+            style:
+              style
+
+          })
+        }
+      );
+
+
+    let data;
+
+    try {
+
+      data =
+        await response.json();
+
+    } catch {
+
+      throw new Error(
+        "Server returned an invalid response."
+      );
+
     }
 
-    The backend will return something like:
 
-    {
-      audioUrl: "https://...song.mp3"
+    if (!response.ok) {
+
+      throw new Error(
+        data.error ||
+        "Song generation failed."
+      );
+
     }
 
-    We will add that connection in the
-    next development step.
-  */
+
+    /* AUDIO URL FROM BACKEND */
+
+    currentAudioUrl =
+      data.audioUrl || null;
 
 
-  await new Promise(
-    resolve => setTimeout(resolve, 1200)
-  );
+    /* BUILD RESULT */
+
+    let photoHTML = "";
+
+    if (selectedPhoto) {
+
+      photoHTML = `
+        <div class="preview">
+
+          <img
+            src="${selectedPhoto}"
+            alt="Birthday photo"
+          >
+
+        </div>
+      `;
+
+    }
 
 
-  showResult(
-    receiver,
-    sender,
-    message,
-    style
-  );
+    let audioHTML = "";
+
+    if (currentAudioUrl) {
+
+      audioHTML = `
+
+        <audio
+          id="birthdayAudio"
+          controls
+        >
+
+          <source
+            src="${currentAudioUrl}"
+            type="audio/mpeg"
+          >
+
+          Your browser does not
+          support audio.
+
+        </audio>
 
 
-  button.disabled = false;
+        <a
+          class="download-btn"
+          href="${currentAudioUrl}"
+          download="birthday-song.mp3"
+        >
 
-  button.textContent =
-    "🎵 Create Another Birthday Song";
+          ⬇ Download MP3
 
-  status.style.display =
-    "none";
-}
-
-
-function showResult(
-  receiver,
-  sender,
-  message,
-  style
-) {
-
-  const result =
-    document.getElementById("result");
-
-  const title =
-    document.getElementById("songTitle");
-
-  const dedication =
-    document.getElementById("dedication");
-
-  title.textContent =
-    "🎉 Happy Birthday " + receiver + "!";
+        </a>
 
 
-  let text =
-    "A special " +
-    style +
-    " birthday song for " +
-    receiver +
-    ", from " +
-    sender +
-    ".";
+        <button
+          class="share-btn"
+          onclick="shareSong()"
+        >
+
+          📤 Share Birthday Song
+
+        </button>
+
+      `;
+
+    } else {
+
+      audioHTML = `
+
+        <p class="error">
+
+          The server responded,
+          but no MP3 audio was returned.
+
+        </p>
+
+      `;
+
+    }
 
 
-  if (message) {
+    result.innerHTML = `
 
-    text +=
-      " ❤️ " + message;
+      <div class="result-card">
+
+        <h2>
+          🎉 Happy Birthday
+          ${escapeHTML(recipientName)}!
+        </h2>
+
+
+        ${photoHTML}
+
+
+        ${
+          message
+          ?
+          `
+          <p>
+            ${escapeHTML(message)}
+          </p>
+          `
+          :
+          ""
+        }
+
+
+        ${
+          senderName
+          ?
+          `
+          <p>
+            ❤️ From
+            ${escapeHTML(senderName)}
+          </p>
+          `
+          :
+          ""
+        }
+
+
+        ${audioHTML}
+
+      </div>
+
+    `;
 
   }
 
+  catch (error) {
 
-  dedication.textContent =
-    text;
+    console.error(error);
 
 
-  if (selectedPhoto) {
+    result.innerHTML = `
 
-    const reader =
-      new FileReader();
+      <div class="result-card">
 
-    reader.onload =
-      function(e) {
+        <h3>
+          ❌ Song generation failed
+        </h3>
 
-        const resultPhoto =
-          document.getElementById("resultPhoto");
+        <p class="error">
 
-        resultPhoto.src =
-          e.target.result;
+          ${escapeHTML(
+            error.message
+          )}
 
-        resultPhoto.style.display =
-          "block";
+        </p>
 
-      };
+      </div>
 
-    reader.readAsDataURL(
-      selectedPhoto
-    );
+    `;
 
   }
 
+  finally {
 
-  result.style.display =
-    "block";
+    button.disabled = false;
 
+    button.innerText =
+      "🎵 Generate Birthday Song";
 
-  result.scrollIntoView({
-    behavior: "smooth"
-  });
+  }
 
 }
 
 
-function downloadSong() {
+/* ==============================
+   SHARE SONG
+================================ */
 
-  const player =
-    document.getElementById("audioPlayer");
+async function shareSong() {
 
-  if (!player.src) {
+  if (!currentAudioUrl) {
 
     alert(
-      "The real MP3 generator is not connected yet. We will connect the music API next."
+      "Generate the song first."
     );
 
     return;
   }
 
 
-  const link =
-    document.createElement("a");
-
-  link.href =
-    player.src;
-
-  link.download =
-    "birthday-song.mp3";
-
-  link.click();
-
-}
+  const recipientName =
+    document
+      .getElementById("recipientName")
+      .value
+      .trim();
 
 
-async function shareSong() {
-
-  const receiver =
-    document.getElementById("receiver").value.trim();
-
-  const sender =
-    document.getElementById("sender").value.trim();
+  const senderName =
+    document
+      .getElementById("senderName")
+      .value
+      .trim();
 
 
   const shareText =
-    "🎂 A special birthday song for " +
-    receiver +
-    " from " +
-    sender +
-    "!";
+    `🎂 A birthday song for ${recipientName}` +
+    (
+      senderName
+      ?
+      ` from ${senderName}`
+      :
+      ""
+    );
 
 
   if (navigator.share) {
@@ -589,23 +684,24 @@ async function shareSong() {
     try {
 
       await navigator.share({
+
         title:
-          "Birthday Song for " +
-          receiver,
+          "Birthday Song",
 
         text:
           shareText,
 
         url:
-          window.location.href
+          currentAudioUrl
+
       });
 
     }
 
-    catch(error) {
+    catch (error) {
 
       console.log(
-        "Sharing cancelled."
+        "Share cancelled."
       );
 
     }
@@ -614,16 +710,46 @@ async function shareSong() {
 
   else {
 
-    await navigator.clipboard.writeText(
-      window.location.href
-    );
+    try {
 
-    alert(
-      "Birthday song link copied!"
-    );
+      await navigator.clipboard
+        .writeText(
+          currentAudioUrl
+        );
+
+      alert(
+        "Song link copied!"
+      );
+
+    }
+
+    catch {
+
+      alert(
+        "Copy this song link: " +
+        currentAudioUrl
+      );
+
+    }
 
   }
 
+}
+
+
+/* ==============================
+   BASIC HTML SAFETY
+================================ */
+
+function escapeHTML(value) {
+
+  const div =
+    document.createElement("div");
+
+  div.textContent =
+    value || "";
+
+  return div.innerHTML;
 }
 
 </script>
